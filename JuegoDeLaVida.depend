@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1726018233 source:d:\juego_de_la_vida\juegodelavida\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	"Libs/matrices.h"
+
+1726024199 d:\juego_de_la_vida\juegodelavida\libs\matrices.h
+
+1726024670 source:d:\juego_de_la_vida\juegodelavida\matrices.c
+	"Libs/matrices.h"
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
