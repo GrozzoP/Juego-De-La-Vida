@@ -1,8 +1,8 @@
 #ifndef MATRICES_H_INCLUDED
 #define MATRICES_H_INCLUDED
 
-#define FILAS 20
-#define COLS 20
+#define FILAS 40
+#define COLS 40
 #define VIVA '*'
 #define MUERTA '.'
 
@@ -18,7 +18,7 @@ void patronBloque(char juego[][COLS]);
 void patronPlaneador(char juego[][COLS]);
 void patronParpadeador(char juego[][COLS]);
 void patronSapo(char juego[][COLS]);
-
+void patronFaro(char juego[][COLS]);
 
 
 #endif // MATRICES_H_INCLUDED

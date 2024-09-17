@@ -23,7 +23,6 @@ void inicioMatriz(char juego[][COLS])
             juego[i][j] = MUERTA;
         }
     }
-
 }
 
 // Mostrar la generacion actual del juego
@@ -35,7 +34,7 @@ void mostrarJuego(char juego[][COLS])
     {
         for(j = 0; j < COLS; j++)
         {
-            juego[i][j] == VIVA ? printf(" %c ", VIVA) : printf("  ");
+            juego[i][j] == VIVA ? printf(" %c ", VIVA) : printf("   ");
         }
         printf("\n");
     }
@@ -50,7 +49,7 @@ int contarVecinas(char juego[][COLS], int fila, int col)
         for(j = col - 1; j <= col + 1; j++)
         {
             // Se cuenta solo si esta dentro de la matriz, y exceptuando el centro (celula a analizar)
-            if((i >= 0 && j >= 0) && !(i == fila && j == col))
+            if((i >= 0 && j >= 0) && (j < COLS && i < FILAS) && !(i == fila && j == col))
                 // Si la celula en particular esta viva o en el proximo turno va a morir, cuenta como vecina
                 // La segunda condicion es logica, ya que si "en la proxima generacion va a morir", significa
                 // que en la actual generacion, esa celula esta VIVA.
@@ -60,7 +59,6 @@ int contarVecinas(char juego[][COLS], int fila, int col)
     }
 
     //printf("\nSUMA POSICION (%d, %d): %d", fila, col, cont);
-
     return cont;
 }
 
@@ -169,12 +167,94 @@ void patronSapo(char juego[][COLS])
     }
 }
 
+void canionPlaneador(char juego[][COLS])
+{
+    int fila, columna;
+    srand(time(NULL));
+
+    // Coloca el glider cannon en una posición aleatoria dentro de los límites
+    fila = numeroAleatorio(0, FILAS - 9);   // Asegura que el cannon cabe verticalmente
+    columna = numeroAleatorio(0, COLS - 36);  // Asegura que el cannon cabe horizontalmente
+
+    // Coloca directamente los puntos del glider cannon en la matriz
+    // Filas 1-9 se colocan manualmente en la matriz
+    juego[fila + 5][columna + 1] = VIVA;
+    juego[fila + 5][columna + 2] = VIVA;
+    juego[fila + 6][columna + 1] = VIVA;
+    juego[fila + 6][columna + 2] = VIVA;
+
+    juego[fila + 3][columna + 13] = VIVA;
+    juego[fila + 3][columna + 14] = VIVA;
+    juego[fila + 4][columna + 12] = VIVA;
+    juego[fila + 4][columna + 16] = VIVA;
+    juego[fila + 5][columna + 11] = VIVA;
+    juego[fila + 5][columna + 17] = VIVA;
+    juego[fila + 6][columna + 11] = VIVA;
+    juego[fila + 6][columna + 15] = VIVA;
+    juego[fila + 6][columna + 17] = VIVA;
+    juego[fila + 6][columna + 18] = VIVA;
+    juego[fila + 7][columna + 11] = VIVA;
+    juego[fila + 7][columna + 17] = VIVA;
+    juego[fila + 8][columna + 12] = VIVA;
+    juego[fila + 8][columna + 16] = VIVA;
+    juego[fila + 9][columna + 13] = VIVA;
+    juego[fila + 9][columna + 14] = VIVA;
+
+    juego[fila + 1][columna + 25] = VIVA;
+    juego[fila + 2][columna + 23] = VIVA;
+    juego[fila + 2][columna + 25] = VIVA;
+    juego[fila + 3][columna + 21] = VIVA;
+    juego[fila + 3][columna + 22] = VIVA;
+    juego[fila + 4][columna + 21] = VIVA;
+    juego[fila + 4][columna + 22] = VIVA;
+    juego[fila + 5][columna + 21] = VIVA;
+    juego[fila + 5][columna + 22] = VIVA;
+    juego[fila + 6][columna + 23] = VIVA;
+    juego[fila + 6][columna + 25] = VIVA;
+    juego[fila + 7][columna + 25] = VIVA;
+
+    juego[fila + 3][columna + 35] = VIVA;
+    juego[fila + 3][columna + 36] = VIVA;
+    juego[fila + 4][columna + 35] = VIVA;
+    juego[fila + 4][columna + 36] = VIVA;
+}
+
+void patronFaro(char juego[][COLS])
+{
+    int fila, columna, i, j;
+    srand(time(NULL));
+
+    fila = numeroAleatorio(0, FILAS - 5);
+    columna = numeroAleatorio(0, COLS - 4);
+
+    for(i = 0; i < 2; i++)
+    {
+        for(j = 0; j < 2; j++)
+        {
+            if(i != 1 || j != 1)
+                juego[fila + i][columna + j] = VIVA;
+        }
+    }
+
+    fila += 2;
+    columna += 2;
+
+    for(i = 0; i < 2; i++)
+    {
+        for(j = 0; j < 2; j++)
+        {
+            if(i != 0 || j != 0)
+                juego[fila + i][columna + j] = VIVA;
+        }
+    }
+}
+
 // ----- INICIO JUEGO----- //
 
 void inicioJuego(char juego[][COLS])
 {
     inicioMatriz(juego);
-    patronSapo(juego);
+    canionPlaneador(juego);
 }
 
 void juego(char juego[][COLS])
