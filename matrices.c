@@ -172,12 +172,10 @@ void canionPlaneador(char juego[][COLS])
     int fila, columna;
     srand(time(NULL));
 
-    // Coloca el glider cannon en una posición aleatoria dentro de los límites
-    fila = numeroAleatorio(0, FILAS - 9);   // Asegura que el cannon cabe verticalmente
-    columna = numeroAleatorio(0, COLS - 36);  // Asegura que el cannon cabe horizontalmente
+    fila = numeroAleatorio(0, FILAS - 9);
+    columna = numeroAleatorio(0, COLS - 36);
 
-    // Coloca directamente los puntos del glider cannon en la matriz
-    // Filas 1-9 se colocan manualmente en la matriz
+    // Genera el primer bloque
     juego[fila + 5][columna + 1] = VIVA;
     juego[fila + 5][columna + 2] = VIVA;
     juego[fila + 6][columna + 1] = VIVA;
@@ -213,6 +211,8 @@ void canionPlaneador(char juego[][COLS])
     juego[fila + 6][columna + 25] = VIVA;
     juego[fila + 7][columna + 25] = VIVA;
 
+
+    // Genera el segundo bloque
     juego[fila + 3][columna + 35] = VIVA;
     juego[fila + 3][columna + 36] = VIVA;
     juego[fila + 4][columna + 35] = VIVA;
