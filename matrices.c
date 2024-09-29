@@ -42,107 +42,22 @@ void mostrarJuego(char juego[][COLS])
 
 int contarVecinas(char juego[][COLS], int fila, int col)
 {
-    int i, j, cont = 0;
+    int f, c, cont = 0, filaMin, filaMax, colMin, colMax;
 
-    //Esquina superior izquierda
-    if(fila == 0 && col == 0)
-    {
-        if(juego[fila][col + 1] == VIVA || juego[fila][col + 1] == 'M') cont++;
-        if(juego[fila + 1][col] == VIVA || juego[fila + 1][col] == 'M') cont++;
-        if(juego[fila + 1][col + 1] == VIVA || juego[fila + 1][col + 1] == 'M') cont++;
-    }
+    filaMin = (fila - 1) > 0 ? fila - 1 : 0;
+    colMin = (col - 1) > 0 ? col - 1 : 0;
+    filaMax = (fila + 1) == FILAS ? fila : fila + 1;
+    colMax = (col + 1) == COLS ? col : col + 1;
 
-    //Esquina superior derecha
-    else if(fila == 0 && col == COLS - 1)
+    for(f = filaMin; f <= filaMax; f++)
     {
-        if(juego[fila][col - 1] == VIVA || juego[fila][col - 1] == 'M') cont++;
-        if(juego[fila + 1][col] == VIVA || juego[fila + 1][col] == 'M') cont++;
-        if(juego[fila + 1][col - 1] == VIVA || juego[fila + 1][col - 1] == 'M') cont++;
-    }
-
-    //Esquina inferior izquierda
-    else if(fila == FILAS - 1 && col == 0)
-    {
-        if(juego[fila - 1][col] == VIVA || juego[fila - 1][col] == 'M') cont++;
-        if(juego[fila - 1][col + 1] == VIVA || juego[fila - 1][col + 1] == 'M') cont++;
-        if(juego[fila][col + 1] == VIVA || juego[fila][col + 1] == 'M') cont++;
-    }
-
-    //Esquina inferior derecha
-    else if(fila == FILAS - 1 && col == COLS - 1)
-    {
-        if(juego[fila - 1][col] == VIVA || juego[fila - 1][col] == 'M') cont++;
-        if(juego[fila - 1][col - 1] == VIVA || juego[fila - 1][col - 1] == 'M') cont++;
-        if(juego[fila][col - 1] == VIVA || juego[fila][col - 1] == 'M') cont++;
-    }
-
-    //Borde superior (sin esquinas)
-    else if(fila == 0)
-    {
-        for(j=col - 1;j<=col + 1;j++)
+        for(c = colMin; c <= colMax; c++)
         {
-            if(j >= 0 && j < COLS)
-            {
-                if(juego[fila][j] == VIVA || juego[fila][j] == 'M') cont++;
-                if(juego[fila + 1][j] == VIVA || juego[fila + 1][j] == 'M') cont++;
-            }
+            if((juego[f][c] == VIVA || juego[f][c] == 'M') && !(f == fila && c == col))
+                cont++;
         }
     }
 
-    //Borde inferior (sin esquinas)
-    else if(fila == FILAS - 1)
-    {
-        for(j=col - 1;j<=col + 1;j++)
-        {
-            if(j >= 0 && j < COLS)
-            {
-                if(juego[fila][j] == VIVA || juego[fila][j] == 'M') cont++;
-                if(juego[fila - 1][j] == VIVA || juego[fila - 1][j] == 'M') cont++;
-            }
-        }
-    }
-
-    //Borde izquierdo (sin esquinas)
-    else if(col == 0)
-    {
-        for(i=fila - 1;i<=fila + 1;i++)
-        {
-            if(i >= 0 && i < FILAS) {
-                if(juego[i][col] == VIVA || juego[i][col] == 'M') cont++;
-                if(juego[i][col + 1] == VIVA || juego[i][col + 1] == 'M') cont++;
-            }
-        }
-    }
-
-    //Borde derecho (sin esquinas)
-    else if(col == COLS - 1) {
-        for(i=fila - 1;i<=fila + 1;i++)
-        {
-            if(i >= 0 && i < FILAS)
-            {
-                if(juego[i][col] == VIVA || juego[i][col] == 'M') cont++;
-                if(juego[i][col - 1] == VIVA || juego[i][col - 1] == 'M') cont++;
-            }
-        }
-    }
-
-    //Célula en el centro
-    else
-    {
-        for(i = fila - 1; i <= fila + 1; i++)
-        {
-            for(j = col - 1; j <= col + 1; j++)
-            {
-            // Se cuenta solo si esta dentro de la matriz, y exceptuando el centro (celula a analizar)
-                if((i >= 0 && j >= 0) && (j < COLS && i < FILAS) && !(i == fila && j == col))
-                    // Si la celula en particular esta viva o en el proximo turno va a morir, cuenta como vecina
-                    // La segunda condicion es logica, ya que si "en la proxima generacion va a morir", significa
-                    // que en la actual generacion, esa celula esta VIVA.
-                    if(juego[i][j] == VIVA || juego[i][j] == 'M')
-                        cont++;
-            }
-        }
-    }
     //printf("\nSUMA POSICION (%d, %d): %d", fila, col, cont);
     return cont;
 }

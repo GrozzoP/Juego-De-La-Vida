@@ -19,7 +19,7 @@ void patronPlaneador(char juego[][COLS]);
 void patronParpadeador(char juego[][COLS]);
 void patronSapo(char juego[][COLS]);
 void patronFaro(char juego[][COLS]);
-void canionPlaneador(char juego[][COLS])
+void canionPlaneador(char juego[][COLS]);
 
 
 #endif // MATRICES_H_INCLUDED
