@@ -3,6 +3,34 @@
 #include <stdlib.h>
 #include <time.h>
 
+char** construirMat(unsigned fila, unsigned col)
+{
+    char **mat = (char **)malloc(fila * sizeof(char *));
+    if(!mat)
+    {
+        printf("Error al asignar memoria.\n");
+        return NULL;
+    }
+    int i;
+    char **ini = mat;
+    char **tmp;
+
+    for(i = 0; i < fila; i++)
+    {
+        *(mat + i) = (char *)malloc(col * sizeof(char));
+        if(!*(mat + i))
+        {
+            for(tmp = ini; tmp < mat + i; tmp++) //Liberamos toda la memoria hasta el punto actual
+                free(*tmp);
+            free(ini);
+            printf("Error al asignar memoria.\n");
+            return NULL;
+        }
+    }
+    return ini;
+}
+
+
 int numeroAleatorio(int minNum, int maxNum)
 {
     srand(time(NULL));
@@ -12,7 +40,7 @@ int numeroAleatorio(int minNum, int maxNum)
 // ----- CONFIGURACION BASICA ----- //
 
 // Rellenar la matriz al comenzar el juego
-void inicioMatriz(char juego[][COLS])
+void inicioMatriz(char **juego)
 {
     int i, j;
 
@@ -26,7 +54,7 @@ void inicioMatriz(char juego[][COLS])
 }
 
 // Mostrar la generacion actual del juego
-void mostrarJuego(char juego[][COLS])
+void mostrarJuego(char **juego)
 {
     int i, j;
 
@@ -40,7 +68,7 @@ void mostrarJuego(char juego[][COLS])
     }
 }
 
-int contarVecinas(char juego[][COLS], int fila, int col)
+int contarVecinas(char **juego, int fila, int col)
 {
     int f, c, cont = 0, filaMin, filaMax, colMin, colMax;
 
@@ -64,7 +92,7 @@ int contarVecinas(char juego[][COLS], int fila, int col)
 
 
 // Modificar el 'estado futuro' de las celulas en base al estado actual
-void actualizarJuego(char juego[][COLS])
+void actualizarJuego(char **juego)
 {
     int i, j, vecinas;
 
@@ -88,7 +116,7 @@ void actualizarJuego(char juego[][COLS])
 // Una vez ya analizada como sera la proxima generacion, se reemplaza cada condicion futura
 // por su simbolo correspondiente. Si nace, entonces sera el simbolo de la celula viva,
 // si va a morir, sera reemplazado por el simbolo de la celula muerta
-void actualizarMatriz(char juego[][COLS])
+void actualizarMatriz(char **juego)
 {
     int i, j;
 
@@ -108,7 +136,7 @@ void actualizarMatriz(char juego[][COLS])
 // ----- PATRONES ----- //
 
 // Bloque estatico que se genera en el medio del mapa
-void patronBloque(char juego[][COLS])
+void patronBloque(char **juego)
 {
     juego[FILAS / 2][COLS / 2] = VIVA;
     juego[FILAS / 2][(COLS / 2) + 1] = VIVA;
@@ -116,7 +144,8 @@ void patronBloque(char juego[][COLS])
     juego[(FILAS / 2) + 1][(COLS / 2) + 1] = VIVA;
 }
 
-void patronPlaneador(char juego[][COLS]){
+void patronPlaneador(char **juego)
+{
     int fila, columna, i;
 
     fila = numeroAleatorio(0, FILAS - 3);
@@ -132,7 +161,7 @@ void patronPlaneador(char juego[][COLS]){
     juego[fila + 2][columna + 1] = VIVA;
 }
 
-void patronParpadeador(char juego[][COLS])
+void patronParpadeador(char **juego)
 {
     int fila, columna, i;
     srand(time(NULL));
@@ -146,7 +175,7 @@ void patronParpadeador(char juego[][COLS])
     }
 }
 
-void patronSapo(char juego[][COLS])
+void patronSapo(char **juego)
 {
     int fila, columna, i;
     srand(time(NULL));
@@ -168,7 +197,7 @@ void patronSapo(char juego[][COLS])
     }
 }
 
-void canionPlaneador(char juego[][COLS])
+void canionPlaneador(char **juego)
 {
     int fila, columna;
     srand(time(NULL));
@@ -220,7 +249,7 @@ void canionPlaneador(char juego[][COLS])
     juego[fila + 4][columna + 36] = VIVA;
 }
 
-void patronFaro(char juego[][COLS])
+void patronFaro(char **juego)
 {
     int fila, columna, i, j;
     srand(time(NULL));
@@ -252,13 +281,13 @@ void patronFaro(char juego[][COLS])
 
 // ----- INICIO JUEGO----- //
 
-void inicioJuego(char juego[][COLS])
+void inicioJuego(char **juego)
 {
     inicioMatriz(juego);
     canionPlaneador(juego);
 }
 
-void juego(char juego[][COLS])
+void juego(char **juego)
 {
     mostrarJuego(juego);
     actualizarJuego(juego);

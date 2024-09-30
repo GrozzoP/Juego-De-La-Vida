@@ -7,16 +7,25 @@
 
 int main()
 {
-    char MJuego[FILAS][COLS];
-    int indice = 0;
+    char **MJuego = construirMat(FILAS, COLS);
+    if(!MJuego)
+        return 1;
+    int i=0;
 
     inicioJuego(MJuego);
-    while(indice < ITERACIONES)
+    while(i < ITERACIONES)
     {
         juego(MJuego);
         system("Pause");
         system("cls");
-        indice++;
+        i++;
     }
+
+    // Liberar memoria dinámica asignada (IMPORTANTE)
+    for(i=0;i<FILAS;i++)
+        free(*(MJuego+i));
+
+    free(MJuego);
+
     return 0;
 }

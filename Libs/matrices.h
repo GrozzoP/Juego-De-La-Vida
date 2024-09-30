@@ -5,21 +5,20 @@
 #define COLS 40
 #define VIVA '*'
 #define MUERTA '.'
-
+char** construirMat(unsigned fila, unsigned col);
 int numeroAleatorio(int minNum, int maxNum);
-void juego(char juego[][COLS]);
-void inicioJuego(char juego[][COLS]);
-void inicioMatriz(char juego[][COLS]);
-void actualizarJuego(char juego[][COLS]);
-void actualizarMatriz(char juego[][COLS]);
-int contarVecinas(char juego[][COLS], int fila, int col);
-void mostrarJuego(char juego[][COLS]);
-void patronBloque(char juego[][COLS]);
-void patronPlaneador(char juego[][COLS]);
-void patronParpadeador(char juego[][COLS]);
-void patronSapo(char juego[][COLS]);
-void patronFaro(char juego[][COLS]);
-void canionPlaneador(char juego[][COLS]);
-
+void juego(char **juego);
+void inicioJuego(char **juego);
+void inicioMatriz(char **juego);
+void actualizarJuego(char **juego);
+void actualizarMatriz(char **juego);
+int contarVecinas(char **juego, int fila, int col);
+void mostrarJuego(char **juego);
+void patronBloque(char **juego);
+void patronPlaneador(char **juego);
+void patronParpadeador(char **juego);
+void patronSapo(char **juego);
+void patronFaro(char **juego);
+void canionPlaneador(char **juego);
 
 #endif // MATRICES_H_INCLUDED
