@@ -13,30 +13,33 @@
 
 #include <SDL2/SDL.h>
 
+#define MAX_COLS 50
 #define TAM_CADENA 20
 #define VIVA '*'
 #define MUERTA '.'
+#define EXTRA 0
 
 void extraerValorNumerico(int* num, const char* cadena, const char* parametro);
-void extraerValorCadena(char* valor, const char* cadena, const char* parametro);
+void extraerValorArchivo(char* valor, const char* cadena, const char* formato);
 char** construirMat(unsigned fila, unsigned col);
+void inicioJuego(char* nombreArchivo, char** juego, int FILAS, int COLS);
 int numeroAleatorio(int minNum, int maxNum);
-void juego(char** juego);
-void inicioJuego(char** juego, char* patron);
-void inicioMatriz(char** juego);
-void actualizarJuego(char** juego);
-void actualizarMatriz(char** juego);
-int contarVecinas(char** juego, int fila, int col);
-void mostrarJuego(char** juego);
-void patronBloque(char** juego);
-void patronPlaneador(char** juego);
-void patronParpadeador(char** juego);
-void patronSapo(char** juego);
-void patronFaro(char** juego);
-void canionPlaneador(char** juego);
-void patronOctagono(char** juego);
-void patronPicante(char** juego);
-void patronPredecesor(char** juego);
+void inicioMatriz(char** juego, int FILAS, int COLS);
+void actualizarJuego(char** juego, int FILAS, int COLS);
+void actualizarMatriz(char** juego, int FILAS, int COLS);
+int contarVecinas(char** juego, int fila, int col, int FILAS, int COLS);
+void mostrarJuego(char** juego, int FILAS, int COLS);
+void patronBloque(char** juego, int FILAS, int COLS);
+void patronPlaneador(char** juego, int FILAS, int COLS);
+void patronParpadeador(char** juego, int FILAS, int COLS);
+void patronSapo(char** juego, int FILAS, int COLS);
+void patronFaro(char** juego, int FILAS, int COLS);
+void canionPlaneador(char** juego, int FILAS, int COLS);
+void patronOctagono(char** juego, int FILAS, int COLS);
+void patronPicante(char** jueg, int FILAS, int COLS);
+void patronPredecesor(char** juego, int FILAS, int COLS);
+int insertarPatron(char** juego, char* nombreArchivo, int FILAS, int COLS);
+void tamanioPatron(char* nombreArchivo, int* FILAS, int* COLS);
 void dibujarRectangulo(SDL_Rect fillRect,int posX, int posY,int alto, int ancho,SDL_Renderer* renderer);
 void dibujarJuego(char**matriz,int fila, int columna,SDL_Rect fillRect,int posX, int posY,int alto, int ancho,SDL_Renderer* renderer);
 

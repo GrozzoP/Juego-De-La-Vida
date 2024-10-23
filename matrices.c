@@ -1,7 +1,9 @@
 #include "libs/matrices.h"
-#include "libs/global.h"
 #include <string.h>
 
+
+// Estas funciones son utiles para el pasaje de argumentos al main, para poder
+// 'validar' lo que se ingresa mediante este medio
 void extraerValorNumerico(int* num, const char* cadena, const char* parametro) {
     char* delimitador = strchr(cadena, ':'), *cadenaNumero;
     size_t tamanioParametro;
@@ -19,32 +21,19 @@ void extraerValorNumerico(int* num, const char* cadena, const char* parametro) {
     *num = atoi(cadenaNumero);
 }
 
-void extraerValorCadena(char* valor, const char* cadena, const char* parametro) {
-    char* delimitador = strchr(cadena, ':'), *aux;
-    size_t tamanioParametro;
+void extraerValorArchivo(char* valor, const char* cadena, const char* formato)
+{
+    char* delimitador = strchr(cadena, '.'), *aux;
 
     if (delimitador == NULL)
         return;
 
-    tamanioParametro = delimitador - cadena;
-
-    if(strncmp(cadena, parametro, tamanioParametro) != 0)
-        return;
-
     aux = delimitador + 1;
 
-    while(*aux == ' ')
-    {
-        aux++;
-    }
+    if(strcmpi(aux, formato) != 0)
+        return;
 
-    while(*aux)
-    {
-        *valor = *aux;
-        valor++; aux++;
-    }
-
-    *valor = '\0';
+    strcpy(valor, cadena);
 }
 
 //---dibujo de matriz
@@ -121,7 +110,7 @@ int numeroAleatorio(int minNum, int maxNum)
 // ----- CONFIGURACION BASICA ----- //
 
 // Rellenar la matriz al comenzar el juego
-void inicioMatriz(char **juego)
+void inicioMatriz(char **juego, int FILAS, int COLS)
 {
     int i, j;
 
@@ -135,7 +124,7 @@ void inicioMatriz(char **juego)
 }
 
 // Mostrar la generacion actual del juego
-void mostrarJuego(char **juego)
+void mostrarJuego(char **juego, int FILAS, int COLS)
 {
     int i, j;
 
@@ -149,7 +138,7 @@ void mostrarJuego(char **juego)
     }
 }
 
-int contarVecinas(char **juego, int fila, int col)
+int contarVecinas(char **juego, int fila, int col, int FILAS, int COLS)
 {
     int f, c, cont = 0, filaMin, filaMax, colMin, colMax;
 
@@ -173,7 +162,7 @@ int contarVecinas(char **juego, int fila, int col)
 
 
 // Modificar el 'estado futuro' de las celulas en base al estado actual
-void actualizarJuego(char **juego)
+void actualizarJuego(char **juego, int FILAS, int COLS)
 {
     int i, j, vecinas;
 
@@ -181,7 +170,7 @@ void actualizarJuego(char **juego)
     {
         for(j = 0; j < COLS; j++)
         {
-            vecinas = contarVecinas(juego, i, j);
+            vecinas = contarVecinas(juego, i, j, FILAS, COLS);
 
             // Si una 'celda' tiene 3 celulas vecinas, en la proxima generacion va a nacer
             if(juego[i][j] == MUERTA && vecinas == 3)
@@ -197,7 +186,7 @@ void actualizarJuego(char **juego)
 // Una vez ya analizada como sera la proxima generacion, se reemplaza cada condicion futura
 // por su simbolo correspondiente. Si nace, entonces sera el simbolo de la celula viva,
 // si va a morir, sera reemplazado por el simbolo de la celula muerta
-void actualizarMatriz(char **juego)
+void actualizarMatriz(char **juego, int FILAS, int COLS)
 {
     int i, j;
 
@@ -217,7 +206,7 @@ void actualizarMatriz(char **juego)
 // ----- PATRONES ----- //
 
 // Bloque estatico que se genera en el medio del mapa
-void patronBloque(char **juego)
+void patronBloque(char **juego, int FILAS, int COLS)
 {
     juego[FILAS / 2][COLS / 2] = VIVA;
     juego[FILAS / 2][(COLS / 2) + 1] = VIVA;
@@ -225,7 +214,7 @@ void patronBloque(char **juego)
     juego[(FILAS / 2) + 1][(COLS / 2) + 1] = VIVA;
 }
 
-void patronPlaneador(char **juego)
+void patronPlaneador(char **juego, int FILAS, int COLS)
 {
     int fila, columna, i;
 
@@ -242,7 +231,7 @@ void patronPlaneador(char **juego)
     juego[fila + 2][columna + 1] = VIVA;
 }
 
-void patronParpadeador(char **juego)
+void patronParpadeador(char **juego, int FILAS, int COLS)
 {
     int fila, columna, i;
     srand(time(NULL));
@@ -256,7 +245,7 @@ void patronParpadeador(char **juego)
     }
 }
 
-void patronSapo(char **juego)
+void patronSapo(char **juego, int FILAS, int COLS)
 {
     int fila, columna, i;
     srand(time(NULL));
@@ -278,7 +267,7 @@ void patronSapo(char **juego)
     }
 }
 
-void canionPlaneador(char **juego)
+void canionPlaneador(char **juego, int FILAS, int COLS)
 {
     int fila, columna;
   //  srand(time(NULL));
@@ -332,7 +321,7 @@ void canionPlaneador(char **juego)
     juego[fila + 4][columna + 36] = VIVA;
 }
 
-void patronFaro(char **juego)
+void patronFaro(char **juego, int FILAS, int COLS)
 {
     int fila, columna, i, j;
     srand(time(NULL));
@@ -361,7 +350,7 @@ void patronFaro(char **juego)
         }
     }
 }
-void patronOctagono(char** juego)
+void patronOctagono(char** juego, int FILAS, int COLS)
 {
     int fila, columna, i, j;
     srand(time(NULL));
@@ -381,7 +370,7 @@ void patronOctagono(char** juego)
         juego[fila + i][j] = VIVA;
     }
 }
-void patronPicante(char**juego)
+void patronPicante(char**juego, int FILAS, int COLS)
 {
     int fila, columna, i;
     srand(time(NULL));
@@ -412,7 +401,7 @@ void patronPicante(char**juego)
     }
 }
 
-void patronPredecesor(char** juego){
+void patronPredecesor(char** juego, int FILAS, int COLS){
     int fila, columna, i, j;
     srand(time(NULL));
 
@@ -445,32 +434,130 @@ void patronPredecesor(char** juego){
 
 // ----- INICIO JUEGO----- //
 
-void inicioJuego(char **juego, char* patron)
+int abrirArchivo(FILE **pF, const char *nombreArchivo, const char *modoApertura, int mostrarError)
 {
-    inicioMatriz(juego);
+    *pF = fopen(nombreArchivo, modoApertura);
 
-   if(strcmpi(patron, "sapo") == 0)
-        patronSapo(juego);
+    if(*pF == NULL)
+    {
+        if(mostrarError == 1)
+            printf("\nOcurrio un error al acceder al archivo %s con modo %s", nombreArchivo, modoApertura);
+        return 0;
+    }
 
-   else if(strcmpi(patron, "picante") == 0)
-        patronPicante(juego);
-
-   else if(strcmpi(patron, "octagono") == 0)
-        patronOctagono(juego);
-
-   else if(strcmpi(patron, "predecesor") == 0)
-        patronPredecesor(juego);
-
-   else
-   {
-       printf("\nComo no se eligio ninguna opcion correcta. Se mostrara el patron 'canion planeador'\n");
-       canionPlaneador(juego);
-   }
+    return 1;
 }
 
-void juego(char **juego)
+void tamanioPatron(char* nombreArchivo, int* FILAS, int* COLS)
 {
-    mostrarJuego(juego);
-    actualizarJuego(juego);
-    actualizarMatriz(juego);
+    char* linea, *ini;
+    int totalFilas = 0, totalColumnas, colsMax = 0;
+    FILE* pF;
+
+    abrirArchivo(&pF, nombreArchivo, "rt", 1);
+
+    // Si no se puede abrir el archivo
+    if(!pF)
+    {
+        printf("\nERROR ARCHIVO");
+        return;
+    }
+
+    linea = malloc(MAX_COLS);
+    ini = linea;
+
+    // Si falla la memoria dinamica
+    if(!linea)
+    {
+        printf("\nERROR MEMORIA");
+        return;
+    }
+
+    // Cuento la cantidad de filas y columnas que me ocupa el patron
+    while(fgets(linea, MAX_COLS, pF))
+    {
+        totalColumnas = 0;
+
+        // Cuento la cantidad de columnas, que puede aumentar segun el patron
+        while(*linea == '0' || *linea == '1')
+        {
+            totalColumnas++;
+            linea++;
+        }
+
+        // Si la linea posee mas columnas que anteriores iteraciones, se modifica
+        if(totalColumnas > colsMax)
+            colsMax = totalColumnas;
+
+        // Las filas no se ven afectadas por un 'maximo'
+        totalFilas++;
+    }
+
+    // Si la cantidad de filas requerida por el patron es mayor a la ingresa, se cambia el valor
+    if(totalFilas > *FILAS)
+        *FILAS = totalFilas + EXTRA;
+
+    // Si la cantidad de columnas requerida por el patron es mayor a la ingresa, se cambia el valor
+    if(colsMax > *COLS)
+        *COLS = colsMax + EXTRA;
+
+    free(ini);
+    fclose(pF);
 }
+
+int insertarPatron(char** juego, char* nombreArchivo, int FILAS, int COLS)
+{
+    int i, j;
+    char* linea, *ini;
+    FILE* pF;
+
+    abrirArchivo(&pF, nombreArchivo, "rt", 1);
+
+    // Si no se puede abrir el archivo
+    if(!pF)
+    {
+        printf("\nERROR ARCHIVO");
+        return 0;
+    }
+
+    linea = malloc(COLS);
+
+    // Si falla la memoria dinamica
+    if(!linea)
+    {
+        printf("\nERROR MEMORIA");
+        return 0;
+    }
+
+    // Guardo la direccion de memoria inicial para luego liberarla
+    ini = linea;
+
+    i=0, j=0; // dependiendo del patron, la posicion(i,j) y el tamanio de la matriz FILAS Y COLUMNAS
+
+    // Con el tamanio de la matriz definida, coloco los valores en la matriz
+    while(fgets(linea, COLS, pF) && i < FILAS)
+    {
+        while(*linea && i < FILAS)
+        {
+            if(*linea == '1' && j < COLS)
+                juego[i][j] = VIVA;
+
+            linea++; j++;
+        }
+
+        i++;
+        j=0;
+    }
+
+    free(ini);
+    fclose(pF);
+
+    return 1;
+}
+
+void inicioJuego(char* nombreArchivo, char** juego, int FILAS, int COLS)
+{
+    inicioMatriz(juego, FILAS, COLS);
+    insertarPatron(juego, nombreArchivo, FILAS, COLS);
+}
+

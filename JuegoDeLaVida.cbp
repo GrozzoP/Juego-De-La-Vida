@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters='&quot;max-filas: 10&quot; &quot;max-columnas: 10&quot; &quot;patron: sapo&quot;' />
+				<Option parameters='&quot;max-filas: 5&quot; &quot;max-columnas: 5&quot; &quot;patron.txt&quot;' />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -39,12 +39,11 @@
 			<Add option="-lSDL2main" />
 			<Add directory="./SDL2/lib" />
 		</Linker>
-		<Unit filename="libs/global.h" />
-		<Unit filename="libs/matrices.c">
+		<Unit filename="Libs/matrices.h" />
+		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="libs/matrices.h" />
-		<Unit filename="main.c">
+		<Unit filename="matrices.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions />

@@ -1,46 +1,45 @@
 #include <stdio.h>
 #include <string.h>
 #include "libs/matrices.h"
-#include "libs/global.h"
-
 #define CELL_SIZE 16
-
-// Defino las variables globales, para que de lo obtenido por argumento al main lo pueda usar en la biblioteca
-int FILAS;
-int COLS;
 
 int main(int argc, char *argv[])
 {
     //--configuracion de inicio de la matriz
-    int i;
-    int F, C, window_width, window_height;
-    char* cad = malloc(TAM_CADENA);
-    F = C = -1;
+    char **MJuego, *nombreArchivo = malloc(TAM_CADENA);
+    int i, FILAS, COLS;
+    int window_width, window_height;
+    FILAS = COLS = -1;
+
+    if(!nombreArchivo)
+        return -1;
 
     for(i = 0; i < argc; i++)
     {
         printf("\nARGUMENTO %d: %s", i + 1, argv[i]);
-        extraerValorNumerico(&F, argv[i], "max-filas");
-        extraerValorNumerico(&C, argv[i], "max-columnas");
-        extraerValorCadena(cad, argv[i], "patron");
+        extraerValorNumerico(&FILAS, argv[i], "max-filas");
+        extraerValorNumerico(&COLS, argv[i], "max-columnas");
+        extraerValorArchivo(nombreArchivo, argv[i], "txt");
     }
 
-    printf("\nFILAS: %d", F);
-    printf("\nCOLS: %d", C);
-    printf("\nPATRON: %s", cad);
+    printf("\nANTES FILAS: %d", FILAS);
+    printf("\nANTES COLS: %d", COLS);
+    printf("\nARCHIVO: %s", nombreArchivo);
 
-    if(F == -1 || C == -1)
+    // Obtengo los valores de FILAS & COLS correspondiente para construir la matriz segun el patron
+    tamanioPatron(nombreArchivo, &FILAS, &COLS);
+
+    printf("\nDESPUES FILAS: %d", FILAS);
+    printf("\nDESPUES COLS: %d", COLS);
+
+    MJuego = construirMat(FILAS, COLS);
+
+    // Si falla el pedido de memoria
+    if(!MJuego)
         return -1;
 
-    // Actualizo las variables globales
-    FILAS = F;
-    COLS = C;
+    inicioJuego(nombreArchivo, MJuego, FILAS, COLS);
 
-    char **MJuego = construirMat(F, C);
-
-    if(!MJuego)
-        return 1;
-    inicioJuego(MJuego, cad);
     //--
     unsigned char done;
     int k;
@@ -52,8 +51,8 @@ int main(int argc, char *argv[])
     SDL_Rect fillRect; //objeto de rectangulo
 
     // Establezco el ancho y alto de la ventana segun la cantidad de filas y columnas
-    window_width = FILAS * CELL_SIZE;
-    window_height = COLS * CELL_SIZE;
+    window_width = COLS * CELL_SIZE;
+    window_height =  FILAS * CELL_SIZE;
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -96,8 +95,8 @@ int main(int argc, char *argv[])
       //  SDL_SetRenderDrawColor(renderer, 0, 240, 50, 0);//establece color del prox elemento
 
         dibujarJuego(MJuego,FILAS,COLS,fillRect,10,10,10,10,renderer); //dibuja constantemente la matriz
-        actualizarJuego(MJuego); //define las vivas y muertas
-        actualizarMatriz(MJuego); // las cambia
+        actualizarJuego(MJuego, FILAS, COLS); //define las vivas y muertas
+        actualizarMatriz(MJuego, FILAS, COLS); // las cambia
 
 
         SDL_RenderPresent(renderer); //actualiza el lienzo
@@ -116,8 +115,8 @@ int main(int argc, char *argv[])
     for(i=0;i<FILAS;i++)
         free(*(MJuego+i));
     free(MJuego);
-    free(cad);
 
+    free(nombreArchivo);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
