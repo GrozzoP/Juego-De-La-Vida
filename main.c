@@ -36,12 +36,15 @@ int main(int argc, char *argv[])
 
     // Si falla el pedido de memoria
     if(!MJuego)
+    {
+        free(nombreArchivo);
         return -1;
+    }
 
     inicioJuego(nombreArchivo, MJuego, FILAS, COLS);
 
     //--
-    unsigned char done;
+    unsigned char done=0;
     int k;
 
     int delay               = 100;//estaba en 100
@@ -117,6 +120,7 @@ int main(int argc, char *argv[])
     free(MJuego);
 
     free(nombreArchivo);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
